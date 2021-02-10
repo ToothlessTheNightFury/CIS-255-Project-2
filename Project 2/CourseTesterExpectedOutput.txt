@@ -1,0 +1,162 @@
+Media Studies
+0 enrolled (maximum allowed 5)
+0 on waitlist (maximum allowed 5)
+
+***********************TESTING ADD METHOD*****************
+*****Students BB, RR, SS, VV, and WW should NOT be added. All others should be added successfully.
+Adam Ant (S925) added successfully
+Bob Barker (S713) not added
+Chevy Chase (S512) added successfully
+Doris Day (S513) added successfully
+Emilio Estevez (S516) added successfully
+Farrah Fawcet (S956) added successfully
+Greta Garbo (S419) added successfully
+Helen Hunt (S281) added successfully
+Jack Johnson (S790) added successfully
+Kim Kardashian (S336) added successfully
+Martina McBride (S156) added successfully
+Renne Russo (S219) not added
+Susan Serandon (S472) not added
+Vince Vaughn (S892) not added
+Walt Whitman (S901) not added
+
+*****Course should now contain AA, CC, DD, EE, and FF on the course roster (in any order) and GG, HH JJ, KK, and MM on the waitlist (in that exact order).
+
+Media Studies
+5 enrolled (maximum allowed 5)
+	Adam Ant (S925)
+	Chevy Chase (S512)
+	Doris Day (S513)
+	Emilio Estevez (S516)
+	Farrah Fawcet (S956)
+5 on waitlist (maximum allowed 5)
+	Greta Garbo (S419)
+	Helen Hunt (S281)
+	Jack Johnson (S790)
+	Kim Kardashian (S336)
+	Martina McBride (S156)
+
+*****For Chevy Chase, add method should return false (student is already enrolled on roster): 
+false
+*****For Helen Hunt, add method should return false (student is already enrolled on waitlist): 
+false
+
+
+***********************TESTING DROP METHOD*****************
+*****For Chevy Chase, drop method should return true (student is enrolled on the roster): 
+true
+
+*****Course should now contain AA, DD, EE, FF, and GG on the course roster (in any order) and HH, JJ, KK, and MM on the waitlist (in that exact order).
+
+Media Studies
+5 enrolled (maximum allowed 5)
+	Adam Ant (S925)
+	Doris Day (S513)
+	Emilio Estevez (S516)
+	Farrah Fawcet (S956)
+	Greta Garbo (S419)
+4 on waitlist (maximum allowed 5)
+	Helen Hunt (S281)
+	Jack Johnson (S790)
+	Kim Kardashian (S336)
+	Martina McBride (S156)
+
+*****For Walt Whitman, drop method should return false (student is not enrolled): 
+false
+
+*****Course should still contain AA, DD, EE, FF, and GG on the course roster (in any order) and HH, JJ, KK, and MM on the waitlist (in that exact order).
+
+Media Studies
+5 enrolled (maximum allowed 5)
+	Adam Ant (S925)
+	Doris Day (S513)
+	Emilio Estevez (S516)
+	Farrah Fawcet (S956)
+	Greta Garbo (S419)
+4 on waitlist (maximum allowed 5)
+	Helen Hunt (S281)
+	Jack Johnson (S790)
+	Kim Kardashian (S336)
+	Martina McBride (S156)
+
+*****For Jack Johnson, drop method should return true (student is on the waitlist): 
+true
+
+*****Course should now contain AA, DD, EE, FF, and GG on the course roster (in any order) and HH, KK, and MM on the waitlist (in that exact order).
+
+Media Studies
+5 enrolled (maximum allowed 5)
+	Adam Ant (S925)
+	Doris Day (S513)
+	Emilio Estevez (S516)
+	Farrah Fawcet (S956)
+	Greta Garbo (S419)
+3 on waitlist (maximum allowed 5)
+	Helen Hunt (S281)
+	Kim Kardashian (S336)
+	Martina McBride (S156)
+
+*****For Adam Ant, drop method should return true (student is enrolled on the roster): 
+true
+
+*****Course should now contain DD, EE, FF, GG, and HH on the course roster (in any order) and KK and MM on the waitlist (in that exact order).
+
+Media Studies
+5 enrolled (maximum allowed 5)
+	Doris Day (S513)
+	Emilio Estevez (S516)
+	Farrah Fawcet (S956)
+	Greta Garbo (S419)
+	Helen Hunt (S281)
+2 on waitlist (maximum allowed 5)
+	Kim Kardashian (S336)
+	Martina McBride (S156)
+
+*****For Doris Day, drop method should return true (student is enrolled on the roster): 
+true
+
+*****Course should now contain EE, FF, GG, HH, KK on the course roster (in any order) and MM on the waitlist (in that exact order).
+
+Media Studies
+5 enrolled (maximum allowed 5)
+	Emilio Estevez (S516)
+	Farrah Fawcet (S956)
+	Greta Garbo (S419)
+	Helen Hunt (S281)
+	Kim Kardashian (S336)
+1 on waitlist (maximum allowed 5)
+	Martina McBride (S156)
+
+*****For Doris Day, drop method should return false (student is not on the roster or waitlist): 
+false
+
+*****For Emilio Estevez, drop method should return true (student is enrolled on the roster): 
+true
+
+*****Course should now contain FF, GG, HH, KK, MM on the course roster (in any order) and no students on the waitlist.
+
+Media Studies
+5 enrolled (maximum allowed 5)
+	Farrah Fawcet (S956)
+	Greta Garbo (S419)
+	Helen Hunt (S281)
+	Kim Kardashian (S336)
+	Martina McBride (S156)
+0 on waitlist (maximum allowed 5)
+
+
+*****Course and waitlist should now be empty.
+
+Media Studies
+0 enrolled (maximum allowed 5)
+0 on waitlist (maximum allowed 5)
+
+*****For Adam Ant, drop method should return false (student is not enrolled): 
+false
+
+*****Course and waitlist should now be empty.
+
+Media Studies
+0 enrolled (maximum allowed 5)
+0 on waitlist (maximum allowed 5)
+
