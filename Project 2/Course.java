@@ -8,7 +8,7 @@ Features
 
  - A student can only be added to the course if they have paid their tuition. (Student class)
 
- - A student cannot be on the roster or waitlist more than once. (isAlreadyRegistered())
+ - A student cannot be on the roster or waitlist more than once. (isAlreadyRegistered(), for loop)
 
  - A student cannot be on both the roster and the waitlist. (isOnRoster(), isOnWaitlist())
 
@@ -34,6 +34,7 @@ public class Course {
 	private int maxStudentsAllowed;
 	private int maxStudentsOnWaitlist;
 	
+	// Benson: Fix constructors
 	public Course (String passedCourseName) {
 
 		this(passedCourseName, DEFAULT_MAX_STUDENTS_IN_COURSE, DEFAULT_MAX_STUDENTS_IN_WAITLIST);
@@ -85,10 +86,13 @@ public class Course {
 
 		Do not print nulls
 	*/
+
+	// Chris: Make mockup of to-string
 	public String toString() {
 		return "" + "" + "" + "";// look at assignment on what is needed
 	}
 
+	// Chris: Finish method below
 	// Returns true if student on roster or waitlist, otherwise false
 	public boolean isAlreadyRegistered (String studentID) {
 
@@ -107,12 +111,14 @@ public class Course {
 		return true;
 	}
 
+	// Benson: Take a look at this
 	// Returns true if dropped student, otherwise false
 	public boolean dropStudent (String studentID) {
 
 		return false;
 	}
 
+	// Chris: Take a look at this
 	// Returns true if added student, otherwise false
 	// Fills roster, then waitlist 
 	public boolean addStudent (String studentID) {
@@ -126,9 +132,11 @@ public class Course {
 		return false;
 	}
 
-	/*
+	// Returns student object of student ID.
+	// Errors if invalid studentID inputted
 	public Student getStudent (String studentID) {
 
+		Student student = new Student ("", "", false);
+		return student;
 	}
-	*/
 }
