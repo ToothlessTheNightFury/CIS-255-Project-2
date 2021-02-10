@@ -22,55 +22,63 @@ Features
 
 */
 
+// TODO: BEN: Add javadoc for all methods?
+
 public class Course {
 
 	public final int DEFAULT_MAX_STUDENTS_IN_COURSE = 30;
-	public final int DEFAULT_MAX_STUDENTS_IN_WAITLIST = 5;
+	public final int DEFAULT_MAX_STUDENTS_IN_WAITLIST = 15;
 
-	ArrayList<String> studentRoster;
-	ArrayList<String> studentWaitList;
+	Student[] studentRoster = new Student[DEFAULT_MAX_STUDENTS_IN_COURSE];
+	Student[] studentWaitList = new Student[DEFAULT_MAX_STUDENTS_IN_WAITLIST];
 
 	private String nameOfCourse;
-	private int maxStudentsAllowed;
-	private int maxStudentsOnWaitlist;
-	
-	// Benson: Fix constructors
-	public Course (String passedCourseName) {
 
-		this(passedCourseName, DEFAULT_MAX_STUDENTS_IN_COURSE, DEFAULT_MAX_STUDENTS_IN_WAITLIST);
+	// BEN: numStudentsAllowed ambiguous variable name. maxCourseStudents better
+	private int numStudentsAllowed = DEFAULT_MAX_STUDENTS_IN_COURSE;
+	private int maxStudentsOnWaitList = DEFAULT_MAX_STUDENTS_IN_WAITLIST;
+
+	private int numStudentsOnRoster = 0;
+	private int numStudentsOnWaitList = 0;
+
+	public Course (String passedCourseName) {
+		nameOfCourse = passedCourseName;
 	}
 
-	public Course (String passedCourseName, int passedMaxRegistered, int passedMaxWaitlist) {
+	public Course (String passedCourseName, int passedMaxRegistered, int passedMaxWaitList) {
 
-		studentRoster = new ArrayList<String>;
+		studentRoster = new Student[passedMaxRegistered];
+		studentWaitList = new Student[passedMaxWaitList];
 
-		nameOfCourse = "";
-		maxStudentsAllowed = passedMaxRegistered;
-		maxStudentsOnWaitlist = passedMaxWaitlist;
+		nameOfCourse = passedCourseName;
+		numStudentsAllowed = passedMaxRegistered;
+		maxStudentsOnWaitList = passedMaxWaitList;
 	}
 	
 	public String getCourseName() {
 		return nameOfCourse;
 	}
 
-	public void setCourseName(String newCourseName) { //possibility of legal name change
-		if (nameOfCourse == newCourseName) {
-			System.out.println("this name is the same name! You're not changing anything. ");
-		} else {
+	// BEN: Perhaps change error message or even not output as same name is OK
+	public void setCourseName (String newCourseName) { //possibility of legal name change
+
+		if (nameOfCourse.equals(newCourseName)) {
+			System.out.println("This name is the same name! You're not changing anything.");
+		}
+		else {
 			nameOfCourse = newCourseName;
 		}
 	}
 	
-	
 	public int getMaxRegistration() {
-		return maxStudentsAllowed;
+		return numStudentsAllowed;
 	}
 	/* 
 	Cannot set max registration since this is determined by the school
 	*/
 	
 	public int getMaxWaitlist() {
-		return maxStudentsOnWaitlist;
+		return maxStudentsOnWaitList;
 	}
 	/* 
 	Cannot set max wait list number since this is determined by the school
@@ -87,49 +95,78 @@ public class Course {
 		Do not print nulls
 	*/
 
-	// Chris: Make mockup of to-string
+	// CHRIS: Make mockup of to-string
+	// BEN: String.format() would be good use here. %s to insert string
 	public String toString() {
 		return "" + "" + "" + "";// look at assignment on what is needed
 	}
 
-	// Chris: Finish method below
+	// CHRIS: Finish method below
 	// Returns true if student on roster or waitlist, otherwise false
-	public boolean isAlreadyRegistered (String studentID) {
-
-		return isOnRoster(studentID) || isOnWaitlist(studentID);
+	public boolean isAlreadyRegistered (Student student) {
+		return isOnRoster(student) || isOnWaitList(student);
 	} 
 
 	// Returns true if student on roster, otherwise false
-	public boolean isOnRoster (String studentID) {
+	public boolean isOnRoster (Student student) {
+
+		for (int i = 0; i < numStudentsOnRoster; i++) {
+
+			if (student == studentRoster[i]) {
+				return true;
+			}
+		}
 
 		return false;
 	}
 
 	// Returns true if student on waitlist, otherwise false
-	public boolean isOnWaitlist (String studentID) {
+	public boolean isOnWaitList (Student student) {
 
-		return true;
-	}
+		for (int i = 0; i < numStudentsOnWaitList; i++) {
 
-	
-	// Chris: Take a look at this
-	// Returns true if dropped student, otherwise false
-	public boolean dropStudent (String studentID) {
+			if (student == studentWaitList[i]) {
+				return true;
+			}
+		}
 
 		return false;
 	}
 
-	// Benson: Take a look at this
 	// Returns true if added student, otherwise false
-	// Fills roster, then waitlist 
-	public boolean addStudent (String studentID) {
+	// Fills roster, then waitlist
+	public boolean addStudent (Student newStudent) {
 
+		boolean addedStudent = false;
+
+		if (!newStudent.isTuitionPaid()) return false;
+		if (isAlreadyRegistered(newStudent)) return false;
+
+		if (numStudentsOnRoster < numStudentsAllowed) {
+
+			addedStudent = true;
+			studentRoster[numStudentsOnRoster] = newStudent;
+			numStudentsOnRoster += 1;
+		}
+		else if (numStudentsOnWaitList < maxStudentsOnWaitList) {
+
+			addedStudent = true;
+			studentRoster[numStudentsOnWaitList] = newStudent;
+			numStudentsOnWaitList += 1;
+		}
+
+		return addedStudent;
+	}
+
+	// CHRIS: Take a look at this
+	// Returns true if dropped student, otherwise false
+	public boolean dropStudent (Student newStudent) {
 		return false;
 	}
 
 	// Adds student to roster, delete from waitlist
 	// Returns true if added from waitlist, false if empty list
-	public boolean addStudentFromWaitlist() {
+	public boolean addStudentFromWaitList() {
 		return false;
 	}
 
