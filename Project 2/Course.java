@@ -104,7 +104,7 @@ public class Course {
 	// Returns true if student on waitlist, otherwise false
 	public boolean isOnWaitlist (String studentID) {
 
-		return false;
+		return true;
 	}
 
 	// Returns true if dropped student, otherwise false
