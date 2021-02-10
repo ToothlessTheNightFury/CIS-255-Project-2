@@ -107,30 +107,40 @@ public class Course {
 		return isOnRoster(student) || isOnWaitList(student);
 	} 
 
-	// Returns true if student on roster, otherwise false
+	// Returns index if student on roster, otherwise returns -1
 	public boolean isOnRoster (Student student) {
-
-		for (int i = 0; i < numStudentsOnRoster; i++) {
-
-			if (student == studentRoster[i]) {
-				return true;
-			}
-		}
-
-		return false;
+		return (indexOfRosterStudent(student) != -1);
 	}
 
 	// Returns true if student on waitlist, otherwise false
 	public boolean isOnWaitList (Student student) {
+		return (indexOfWaitListStudent(student) != -1);
+	}
+
+	// Returns index of student if on roster, otherwise returns -1
+	public int indexOfRosterStudent (Student student) {
+
+		for (int i = 0; i < numStudentsOnRoster; i++) {
+
+			if (student == studentRoster[i]) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	// Returns index of student if on waitlist, otherwise returns -1
+	public int indexOfWaitListStudent (Student student) {
 
 		for (int i = 0; i < numStudentsOnWaitList; i++) {
 
 			if (student == studentWaitList[i]) {
-				return true;
+				return i;
 			}
 		}
 
-		return false;
+		return -1;
 	}
 
 	// Returns true if added student, otherwise false
@@ -144,30 +154,84 @@ public class Course {
 
 		if (numStudentsOnRoster < numStudentsAllowed) {
 
-			addedStudent = true;
 			studentRoster[numStudentsOnRoster] = newStudent;
 			numStudentsOnRoster += 1;
+			addedStudent = true;
 		}
 		else if (numStudentsOnWaitList < maxStudentsOnWaitList) {
 
-			addedStudent = true;
 			studentRoster[numStudentsOnWaitList] = newStudent;
 			numStudentsOnWaitList += 1;
+			addedStudent = true;
 		}
-
 		return addedStudent;
 	}
 
-	// CHRIS: Take a look at this
+	// TODO: BEN: Look at why Chevy Chase and Jack Johnson retrn false
 	// Returns true if dropped student, otherwise false
-	public boolean dropStudent (Student newStudent) {
-		return false;
+	public boolean dropStudent (Student student) {
+
+		boolean droppedStudent = false;
+
+		int indexOfRosterStudent = indexOfRosterStudent(student);
+		int indexOfWaitListStudent = indexOfWaitListStudent(student);
+
+		// If student found, returns index. Otherwise, returns -1
+		if (indexOfRosterStudent != -1) {
+
+			deleteStudentFromRoster(indexOfRosterStudent);
+			droppedStudent = true;
+		}
+		else if (indexOfWaitListStudent != -1) {
+
+			deleteStudentFromWaitList(indexOfWaitListStudent);
+			droppedStudent = true;
+		}
+
+		return droppedStudent;
+	}
+
+	public void deleteStudentFromRoster (int index) {
+
+		// Shift all students down by 1
+		for (int i = index; i < numStudentsOnRoster - 1; i++) {
+
+			studentRoster[i] = studentRoster[i + 1];
+		}
+
+		// Reduce number of students by 1
+		numStudentsOnRoster -= 1;
+		addStudentFromWaitList();
+	}
+
+	public void deleteStudentFromWaitList (int index) {
+
+		// Shift all students down by 1
+		for (int i = index; i < numStudentsOnWaitList - 1; i++) {
+
+			studentWaitList[i] = studentWaitList[i + 1];
+		}
+
+		// Reduce number of students by 1
+		numStudentsOnWaitList -= 1;
 	}
 
 	// Adds student to roster, delete from waitlist
 	// Returns true if added from waitlist, false if empty list
 	public boolean addStudentFromWaitList() {
-		return false;
+
+		boolean addedFromWaitList = false;
+
+		if (numStudentsOnWaitList > 0) {
+
+			studentRoster[numStudentsOnRoster] = studentWaitList[numStudentsOnWaitList - 1]; // Arrays begin at index 0
+			numStudentsOnRoster += 1;
+			numStudentsOnWaitList -= 1;
+
+			addedFromWaitList = true;
+		}
+
+		return addedFromWaitList;
 	}
 
 	// Returns student object of student ID.

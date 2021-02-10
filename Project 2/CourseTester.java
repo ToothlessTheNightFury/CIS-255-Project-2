@@ -49,7 +49,6 @@ public class CourseTester {
 		System.out.println("*****For " + studentToAdd.getName()
 				+ ", add method should return false (student is already enrolled on waitlist): \n" + added);
 
-		/*
 		System.out.println("\n\n***********************TESTING DROP METHOD*****************");
 		// drop student from roster
 		Student studentToDrop = studentsInSchool[2]; // CC
@@ -130,7 +129,6 @@ public class CourseTester {
 				+ ", drop method should return false (student is not enrolled): \n" + dropped);
 		System.out.println("\n*****Course and waitlist should now be empty.");
 		System.out.println("\n" + course + "\n");
-		*/
 	}
 
 }
