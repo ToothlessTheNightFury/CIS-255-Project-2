@@ -111,14 +111,15 @@ public class Course {
 		return true;
 	}
 
-	// Benson: Take a look at this
+	
+	// Chris: Take a look at this
 	// Returns true if dropped student, otherwise false
 	public boolean dropStudent (String studentID) {
 
 		return false;
 	}
 
-	// Chris: Take a look at this
+	// Benson: Take a look at this
 	// Returns true if added student, otherwise false
 	// Fills roster, then waitlist 
 	public boolean addStudent (String studentID) {
