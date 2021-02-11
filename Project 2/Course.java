@@ -34,91 +34,99 @@ public class Course {
 
 	private String nameOfCourse;
 
-	// BEN: numStudentsAllowed ambiguous variable name. maxCourseStudents better
-	private int numStudentsAllowed = DEFAULT_MAX_STUDENTS_IN_COURSE;
+	private int maxCourseStudents = DEFAULT_MAX_STUDENTS_IN_COURSE;
 	private int maxStudentsOnWaitList = DEFAULT_MAX_STUDENTS_IN_WAITLIST;
 
 	private int numStudentsOnRoster = 0;
 	private int numStudentsOnWaitList = 0;
 
-	public Course (String passedCourseName) {
+	public Course(String passedCourseName) {
 		nameOfCourse = passedCourseName;
 	}
 
-	public Course (String passedCourseName, int passedMaxRegistered, int passedMaxWaitList) {
+	public Course(String passedCourseName, int passedMaxRegistered, int passedMaxWaitList) {
 
 		studentRoster = new Student[passedMaxRegistered];
 		studentWaitList = new Student[passedMaxWaitList];
 
 		nameOfCourse = passedCourseName;
-		numStudentsAllowed = passedMaxRegistered;
+		maxCourseStudents = passedMaxRegistered;
 		maxStudentsOnWaitList = passedMaxWaitList;
 	}
-	
+
 	public String getCourseName() {
 		return nameOfCourse;
 	}
 
-	// BEN: Perhaps change error message or even not output as same name is OK
-	public void setCourseName (String newCourseName) { //possibility of legal name change
+	public void setCourseName(String newCourseName) {
+		nameOfCourse = newCourseName;
+	}
 
-		if (nameOfCourse.equals(newCourseName)) {
-			System.out.println("This name is the same name! You're not changing anything.");
-		}
-		else {
-			nameOfCourse = newCourseName;
-		}
-	}
-	
 	public int getMaxRegistration() {
-		return numStudentsAllowed;
+		return maxCourseStudents;
 	}
-	/* 
-	Cannot set max registration since this is determined by the school
-	*/
-	
+	/*
+	 * Cannot set max registration since this is determined by the school
+	 */
+
 	public int getMaxWaitlist() {
 		return maxStudentsOnWaitList;
 	}
-	/* 
-	Cannot set max wait list number since this is determined by the school
-	*/
+	/*
+	 * Cannot set max wait list number since this is determined by the school
+	 */
 
 	/*
-		Outputs:
-		Name of Course
-		# of Students Enrolled / Max Num that can be enrolled
-		Roster of enrolled students
-		# of students of waitlist / Max num on waitlist
-		Students on waitlist
+	 * Outputs: Name of Course # of Students Enrolled / Max Num that can be enrolled
+	 * Roster of enrolled students # of students of waitlist / Max num on waitlist
+	 * Students on waitlist
+	 * 
+	 * Do not print nulls
+	 */
 
-		Do not print nulls
-	*/
-
-	// CHRIS: Make mockup of to-string
 	// BEN: String.format() would be good use here. %s to insert string
 	public String toString() {
-		return "" + "" + "" + "";// look at assignment on what is needed
+
+		String answer = nameOfCourse + " has: \n" + numStudentsOnRoster + " students out of a capacity of "
+				+ maxCourseStudents + "\n" + Arrays.toString(studentRoster) + "\n" + numStudentsOnWaitList
+				+ " students on the waitlist out of a capaicity of " + getMaxWaitlist() + "\n"
+				+ Arrays.toString(studentWaitList);
+
+		return answer;
 	}
 
-	// CHRIS: Finish method below
+
 	// Returns true if student on roster or waitlist, otherwise false
-	public boolean isAlreadyRegistered (Student student) {
-		return isOnRoster(student) || isOnWaitList(student);
-	} 
+	public boolean isAlreadyRegistered(Student student) {
+		if (isOnRoster(student) || isOnWaitList(student)) {
+			return true;
+		}
+		return false;
+	}
 
 	// Returns index if student on roster, otherwise returns -1
-	public boolean isOnRoster (Student student) {
-		return (indexOfRosterStudent(student) != -1);
+	public boolean isOnRoster(Student student) {
+		for (int i = 0; i < studentRoster.length - 1; i++) {
+			if (student == studentRoster[i]) {
+				return true;
+			}
+		}
+		return false; // Chris: what is (indexOfRosterStudent(student) != -1)
 	}
 
 	// Returns true if student on waitlist, otherwise false
-	public boolean isOnWaitList (Student student) {
-		return (indexOfWaitListStudent(student) != -1);
+	public boolean isOnWaitList(Student student) {
+		for (int i = 0; i < studentWaitList.length - 1; i++) { // trying to understand the code below and made this to
+																// make it fit.
+			if (student != studentWaitList[i]) {
+				return false;
+			}
+		}
+		return (indexOfWaitListStudent(student) != -1); // if I'm reading this correctly, this mean returns true
 	}
 
 	// Returns index of student if on roster, otherwise returns -1
-	public int indexOfRosterStudent (Student student) {
+	public int indexOfRosterStudent(Student student) {
 
 		for (int i = 0; i < numStudentsOnRoster; i++) {
 
@@ -131,7 +139,7 @@ public class Course {
 	}
 
 	// Returns index of student if on waitlist, otherwise returns -1
-	public int indexOfWaitListStudent (Student student) {
+	public int indexOfWaitListStudent(Student student) {
 
 		for (int i = 0; i < numStudentsOnWaitList; i++) {
 
@@ -145,20 +153,21 @@ public class Course {
 
 	// Returns true if added student, otherwise false
 	// Fills roster, then waitlist
-	public boolean addStudent (Student newStudent) {
+	public boolean addStudent(Student newStudent) {
 
 		boolean addedStudent = false;
 
-		if (!newStudent.isTuitionPaid()) return false;
-		if (isAlreadyRegistered(newStudent)) return false;
+		if (!newStudent.isTuitionPaid())
+			return false;
+		if (isAlreadyRegistered(newStudent))
+			return false;
 
-		if (numStudentsOnRoster < numStudentsAllowed) {
+		if (numStudentsOnRoster < maxCourseStudents) {
 
 			studentRoster[numStudentsOnRoster] = newStudent;
 			numStudentsOnRoster += 1;
 			addedStudent = true;
-		}
-		else if (numStudentsOnWaitList < maxStudentsOnWaitList) {
+		} else if (numStudentsOnWaitList < maxStudentsOnWaitList) {
 
 			studentRoster[numStudentsOnWaitList] = newStudent;
 			numStudentsOnWaitList += 1;
@@ -169,7 +178,7 @@ public class Course {
 
 	// TODO: BEN: Look at why Chevy Chase and Jack Johnson retrn false
 	// Returns true if dropped student, otherwise false
-	public boolean dropStudent (Student student) {
+	public boolean dropStudent(Student student) {
 
 		boolean droppedStudent = false;
 
@@ -181,8 +190,7 @@ public class Course {
 
 			deleteStudentFromRoster(indexOfRosterStudent);
 			droppedStudent = true;
-		}
-		else if (indexOfWaitListStudent != -1) {
+		} else if (indexOfWaitListStudent != -1) {
 
 			deleteStudentFromWaitList(indexOfWaitListStudent);
 			droppedStudent = true;
@@ -191,7 +199,7 @@ public class Course {
 		return droppedStudent;
 	}
 
-	public void deleteStudentFromRoster (int index) {
+	public void deleteStudentFromRoster(int index) {
 
 		// Shift all students down by 1
 		for (int i = index; i < numStudentsOnRoster - 1; i++) {
@@ -204,7 +212,7 @@ public class Course {
 		addStudentFromWaitList();
 	}
 
-	public void deleteStudentFromWaitList (int index) {
+	public void deleteStudentFromWaitList(int index) {
 
 		// Shift all students down by 1
 		for (int i = index; i < numStudentsOnWaitList - 1; i++) {
@@ -236,9 +244,9 @@ public class Course {
 
 	// Returns student object of student ID.
 	// Errors if invalid studentID inputted
-	public Student getStudent (String studentID) {
+	public Student getStudent(String studentID) {
 
-		Student student = new Student ("", "", false);
+		Student student = new Student("", "", false);
 		return student;
 	}
 }
