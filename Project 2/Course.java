@@ -41,7 +41,7 @@ public class Course {
 	private int numStudentsOnWaitList = 0;
 
 	public Course(String passedCourseName) {
-		nameOfCourse = passedCourseName;
+		nameOfCourse = passedCourseName; // should we set studentRoster and studentWaitList to default number?
 	}
 
 	public Course(String passedCourseName, int passedMaxRegistered, int passedMaxWaitList) {
@@ -58,8 +58,8 @@ public class Course {
 		return nameOfCourse;
 	}
 
-	public void setCourseName(String newCourseName) {
-		nameOfCourse = newCourseName;
+	public void setCourseName(String courseName) {
+		this.nameOfCourse = courseName;
 	}
 
 	public int getMaxRegistration() {
@@ -84,7 +84,6 @@ public class Course {
 	 * Do not print nulls
 	 */
 
-	// BEN: String.format() would be good use here. %s to insert string
 	public String toString() {
 
 		String answer = String.format("%s has: \nRoster: %d/%d\n%s\nWaitlist has: %d/%d\n%s", nameOfCourse,
@@ -101,7 +100,7 @@ public class Course {
 		return false;
 	}
 
-	// Returns index if student on roster, otherwise returns -1
+	// returns true if student is on roster, otherwise returns false
 	public boolean isOnRoster(Student student) {
 		for (int i = 0; i < studentRoster.length; i++) {
 			if (student == studentRoster[i]) {
@@ -150,75 +149,57 @@ public class Course {
 
 	// Returns true if added student, otherwise false
 	// Fills roster, then waitlist
-	public boolean addStudent(Student newStudent) {
+	public boolean addStudent(Student student) {
 
 		boolean addedStudent = false;
 
-		if (!newStudent.isTuitionPaid() || isAlreadyRegistered(newStudent)) {
+		if (!student.isTuitionPaid() || isAlreadyRegistered(student)) {
 			return false;
 		}
 
 		if (numStudentsOnRoster < maxCourseStudents) {
 
-			studentRoster[numStudentsOnRoster] = newStudent;
+			studentRoster[numStudentsOnRoster] = student;
 			numStudentsOnRoster += 1;
 			addedStudent = true;
 		} else if (numStudentsOnWaitList < maxStudentsOnWaitList) {
 
-			studentWaitList[numStudentsOnWaitList] = newStudent;
+			studentWaitList[numStudentsOnWaitList] = student;
 			numStudentsOnWaitList += 1;
 			addedStudent = true;
-		}
+		} // else no room on studentRoster && studentWaitList
 		return addedStudent;
 	}
 
 	// TODO: BEN: Look at why Chevy Chase and Jack Johnson retrn false
-	
-	//CK will give this a try. 
+
+	// CK will give this a try.
 	// Returns true if dropped student, otherwise false
 	public boolean dropStudent(Student student) {
 
-				if (!isAlreadyRegistered(student)) {
+		if (!isAlreadyRegistered(student)) {
 			return false;
-		} else if (isOnWaitList(student)) {
+		} else if (indexOfWaitListStudent(student) == -1) { // must be on roster (indexOfRosterStudent(student) == -1) || 
+			deleteStudentFromRoster(indexOfRosterStudent(student));
+			return true;
+		} else { //(isOnWaitList(student))
 			deleteStudentFromWaitList(indexOfWaitListStudent(student));
 			return true;
-		} else { // if (isOnRoster(student))
-
-			deleteStudentFromRoster(indexOfRosterStudent(student)); 
-			
-
+		} 
 			/*
 			 * if(studentWaitList[0] != null) { // this only works because order doesn't
 			 * matter what order. studentRoster[namePosition] = studentWaitList[0];
 			 * deleteStudentFromWaitList(0); }
 			 * 
 			 */
-			return true;
-		}
-		/*
-		 // Ben's original code: boolean droppedStudent = false;
-		  
-		 int indexOfRosterStudent = indexOfRosterStudent(student); int
-		 indexOfWaitListStudent = indexOfWaitListStudent(student);
-		  
-		  If student found, returns index. Otherwise, returns -1 if
-		  (indexOfRosterStudent != -1) {
-		  
-		  deleteStudentFromRoster(indexOfRosterStudent); droppedStudent = true; } else
-		  if (indexOfWaitListStudent != -1) {
-		  
-		  deleteStudentFromWaitList(indexOfWaitListStudent); droppedStudent = true; }
-		  
-		 return droppedStudent;
-		 */
+		
 
 	}
 
 	public void deleteStudentFromRoster(int index) {
 
 		studentRoster[index] = null;
-		
+
 		// Shift all students down by 1
 		for (int i = index; i < numStudentsOnRoster - 1; i++) {
 
@@ -242,10 +223,10 @@ public class Course {
 		}
 
 		// Reduce number of students by 1
-		if(numStudentsOnWaitList !=0) {
+		if (numStudentsOnWaitList != 0) {
 			numStudentsOnWaitList -= 1;
 		}
-		
+
 		studentWaitList[numStudentsOnWaitList] = null;
 	}
 
@@ -256,11 +237,16 @@ public class Course {
 		boolean addedFromWaitList = false;
 
 		if (numStudentsOnWaitList > 0) {
-
-			studentRoster[numStudentsOnRoster] = studentWaitList[numStudentsOnWaitList - 1]; // Arrays begin at index 0
+			// name on position 4 is now last student on waitlist. Changing to index at 0
+			studentRoster[numStudentsOnRoster] = studentWaitList[0]; // Arrays begin at index 0
 			numStudentsOnRoster += 1;
 			numStudentsOnWaitList -= 1;
 
+			// need to move over the WaitList of students
+			for (int i=0; i<numStudentsOnWaitList; i++) {
+				studentWaitList[i] = studentWaitList[i+1];
+			}
+			studentWaitList[numStudentsOnWaitList] = null;
 			addedFromWaitList = true;
 		}
 
