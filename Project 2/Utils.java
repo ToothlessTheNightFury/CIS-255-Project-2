@@ -65,12 +65,12 @@ import java.util.Scanner;
  *
  * @author Benson Yee
  * @since 2021-01-23
- * @version 1.2.2
+ * @version 1.2.3
  */
 
 public class Utils {
 
-    public static String VERSION = "1.2.2";
+    public static String VERSION = "1.2.3";
 
     // TODO: static bool fileExists (String filename)
 
