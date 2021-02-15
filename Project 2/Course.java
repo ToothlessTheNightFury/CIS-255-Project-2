@@ -1,44 +1,45 @@
 import java.util.*;
 
 // TODO: BEN: Add javadoc for all methods?
+// TODO: BEN: Make internal functions private
 
 public class Course {
 
 	public final int DEFAULT_MAX_STUDENTS_IN_COURSE = 30;
 	public final int DEFAULT_MAX_STUDENTS_IN_WAITLIST = 15;
 
-	Student[] studentRoster = new Student[DEFAULT_MAX_STUDENTS_IN_COURSE];
-	Student[] studentWaitList = new Student[DEFAULT_MAX_STUDENTS_IN_WAITLIST];
+	private Student[] studentRoster = new Student[DEFAULT_MAX_STUDENTS_IN_COURSE];
+	private Student[] studentWaitList = new Student[DEFAULT_MAX_STUDENTS_IN_WAITLIST];
 
 	// BEN: Maybe courseName instead?
-	private String nameOfCourse;
+	private String courseName;
 
 	private int maxCourseStudents = DEFAULT_MAX_STUDENTS_IN_COURSE;
-	private int maxStudentsOnWaitList = DEFAULT_MAX_STUDENTS_IN_WAITLIST;
+	private int maxWaitListStudents = DEFAULT_MAX_STUDENTS_IN_WAITLIST; // BEN: Maybe maxWaitListStudents?
 
 	private int numStudentsOnRoster = 0;
 	private int numStudentsOnWaitList = 0;
 
 	public Course(String passedCourseName) {
-		nameOfCourse = passedCourseName; // should we set studentRoster and studentWaitList to default number?
+		courseName = passedCourseName; // should we set studentRoster and studentWaitList to default number?
 	}
 
-	public Course(String nameOfCourse, int maxCourseStudents, int maxStudentsOnWaitList) {
+	public Course(String courseName, int maxCourseStudents, int maxWaitListStudents) {
 
 		studentRoster = new Student[maxCourseStudents];
-		studentWaitList = new Student[maxStudentsOnWaitList];
+		studentWaitList = new Student[maxWaitListStudents];
 
-		this.nameOfCourse = nameOfCourse;
+		this.courseName = courseName;
 		this.maxCourseStudents = maxCourseStudents;
-		this.maxStudentsOnWaitList = maxStudentsOnWaitList;
+		this.maxWaitListStudents = maxWaitListStudents;
 	}
 
 	public String getCourseName() {
-		return nameOfCourse;
+		return courseName;
 	}
 
 	public void setCourseName(String courseName) {
-		this.nameOfCourse = courseName;
+		this.courseName = courseName;
 	}
 
 	public int getMaxRegistration() {
@@ -50,7 +51,7 @@ public class Course {
 	 */
 
 	public int getMaxWaitList() {
-		return maxStudentsOnWaitList;
+		return maxWaitListStudents;
 	}
 
 	/*
@@ -68,14 +69,14 @@ public class Course {
 	public String toString() {
 
 		/*
-		String str = String.format("%s has: \nRoster: %d/%d\n%s\nWaitlist has: %d/%d\n%s", nameOfCourse,
+		String str = String.format("%s has: \nRoster: %d/%d\n%s\nWaitlist has: %d/%d\n%s", courseName,
 				numStudentsOnRoster, maxCourseStudents, Arrays.deepToString(studentRoster), numStudentsOnWaitList,
 				getMaxWaitList(), Arrays.deepToString(studentWaitList));
 		 */
 
 		// BEN: Option 2 for toString()
 		String str = String.format("[%s]\n====================\nROSTER (%d/%d)\n%s\nWAIT LIST (%d/%d)\n%s",
-				nameOfCourse.toUpperCase(), numStudentsOnRoster, maxCourseStudents, studentRosterToString(), numStudentsOnWaitList, maxStudentsOnWaitList, waitListToString());
+				courseName.toUpperCase(), numStudentsOnRoster, maxCourseStudents, studentRosterToString(), numStudentsOnWaitList, maxWaitListStudents, waitListToString());
 
 		return str;
 	}
@@ -85,7 +86,7 @@ public class Course {
 		String str = "";
 
 		for (int i = 0; i < numStudentsOnRoster; i++) {
-			str += String.format("%s\n", studentRoster[i].getName());
+			str += String.format("%s (%s)\n", studentRoster[i].getName(), studentRoster[i].getID());
 		}
 
 		if (str.isEmpty()) {
@@ -120,12 +121,14 @@ public class Course {
 		return false;
 	}
 
+	// TODO: Find out why keeps adding
+
 	// returns true if student is on roster, otherwise returns false
 	public boolean isOnRoster(Student student) {
 
-		for (int i = 0; i < studentRoster.length; i++) {
+		for (int i = 0; i < numStudentsOnRoster; i++) {
 
-			if (student == studentRoster[i]) {
+			if (student.getID().equals(studentRoster[i].getID())) {
 				return true;
 			}
 		}
@@ -136,9 +139,9 @@ public class Course {
 	// Returns true if student on waitlist, otherwise false
 	public boolean isOnWaitList(Student student) {
 
-		for (int i = 0; i < studentWaitList.length; i++) {
+		for (int i = 0; i < numStudentsOnWaitList; i++) {
 
-			if (student == studentWaitList[i]) {
+			if (student.getID().equals(studentWaitList[i].getID())) {
 				return true;
 			}
 		}
@@ -188,7 +191,7 @@ public class Course {
 			numStudentsOnRoster += 1;
 			addedStudent = true;
 		}
-		else if (numStudentsOnWaitList < maxStudentsOnWaitList) {
+		else if (numStudentsOnWaitList < maxWaitListStudents) {
 
 			studentWaitList[numStudentsOnWaitList] = student;
 			numStudentsOnWaitList += 1;
