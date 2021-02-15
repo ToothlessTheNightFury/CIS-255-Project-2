@@ -79,23 +79,22 @@ public class Utils {
      *
      * @param  fileName the file name
      * @param  arr      the String array to store the data into
-     * @param  arrSize  the array's size
      * @return the number of lines read from the file
      * @throws FileNotFoundException if the file does not exist,
      *         is a directory rather than a regular file,
      *         or for some other reason cannot be opened for
      *         reading.
      */
-    public static int fileRead (String fileName, String[] arr, int arrSize) {
+    public static int fileRead (String fileName, String[] arr) {
 
         int index = 0;
 
         try {
             File myFile = new File (fileName);
             Scanner scanner = new Scanner (myFile);
-            initArray(arr, arrSize);
+            initArray(arr);
 
-            while (scanner.hasNextLine() && index != arrSize) {
+            while (scanner.hasNextLine() && index != arr.length) {
                 arr[index++] = scanner.nextLine();
             }
 
@@ -115,11 +114,10 @@ public class Utils {
      *
      * @param  fileName    the file name
      * @param  arr         the String array to write with
-     * @param  arrSize     the array's size
      * @return true if write was successful, false otherwise
      * @throws IOException if unable to write to file
      */
-    public static boolean fileWrite (String fileName, String[] arr, int arrSize) {
+    public static boolean fileWrite (String fileName, String[] arr) {
 
         try {
             File myFile;
@@ -139,7 +137,7 @@ public class Utils {
 
             FileWriter myWriter = new FileWriter(fileName);
 
-            for (int i = 0; i < arrSize; i++) {
+            for (int i = 0; i < arr.length; i++) {
                 myWriter.write(arr[i] + "\n");
             }
 
@@ -197,22 +195,20 @@ public class Utils {
      * Initializes an int array to 0.
      *
      * @param arr     the array to initialize
-     * @param arrSize the array's size
      */
-    public static void initArray (int[] arr, int arrSize) {
-        initArray(arr, arrSize, 0);
+    public static void initArray (int[] arr) {
+        initArray(arr, 0);
     }
 
     /**
      * Initializes an int array to a given value.
      *
      * @param arr     the array to initialize
-     * @param arrSize the array's size
      * @param value   the value to initialize to
      */
-    public static void initArray (int[] arr, int arrSize, int value) {
+    public static void initArray (int[] arr, int value) {
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = value;
         }
     }
@@ -224,22 +220,20 @@ public class Utils {
      * Initializes a double array to 0.
      *
      * @param arr     the array to initialize
-     * @param arrSize the array's size
      */
-    public static void initArray (double[] arr, int arrSize) {
-        initArray(arr, arrSize, 0);
+    public static void initArray (double[] arr) {
+        initArray(arr, 0);
     }
 
     /**
      * Initializes a double array to a given value.
      *
      * @param arr     the array to initialize
-     * @param arrSize the array's size
      * @param value   the value to initialize to
      */
-    public static void initArray (double[] arr, int arrSize, double value) {
+    public static void initArray (double[] arr, double value) {
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = value;
         }
     }
@@ -251,22 +245,20 @@ public class Utils {
      * Initializes a float array to 0.
      *
      * @param arr     the array to initialize
-     * @param arrSize the array's size
      */
-    public static void initArray (float[] arr, int arrSize) {
-        initArray(arr, arrSize, 0);
+    public static void initArray (float[] arr) {
+        initArray(arr, 0);
     }
 
     /**
      * Initializes a float array to a given value.
      *
      * @param arr     the array to initialize
-     * @param arrSize the array's size
      * @param value   the value to initialize to
      */
-    public static void initArray (float[] arr, int arrSize, float value) {
+    public static void initArray (float[] arr, float value) {
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = value;
         }
     }
@@ -278,22 +270,20 @@ public class Utils {
      * Initializes a String array to an empty String.
      *
      * @param arr     the array to initialize
-     * @param arrSize the array's size
      */
-    public static void initArray (String[] arr, int arrSize) {
-        initArray(arr, arrSize, "");
+    public static void initArray (String[] arr) {
+        initArray(arr, "");
     }
 
     /**
      * Initializes a String array to a given value.
      *
      * @param arr     the array to initialize
-     * @param arrSize the array's size
      * @param value   the value to initialize to
      */
-    public static void initArray (String[] arr, int arrSize, String value) {
+    public static void initArray (String[] arr, String value) {
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = value;
         }
     }
@@ -322,11 +312,10 @@ public class Utils {
      * }
      *
      * @param options the String array containing the possible options
-     * @param arrSize the array's size
      * @return the user's choice
      */
-    public static int menu (String[] options, int arrSize) {
-        return menu("", options, arrSize);
+    public static int menu (String[] options) {
+        return menu("", options);
     }
 
     /**
@@ -352,17 +341,16 @@ public class Utils {
      *
      * @param title   the title of the menu
      * @param options the String array containing the possible options
-     * @param arrSize the array's size
      * @return the user's choice
      */
-    public static int menu (String title, String[] options, int arrSize) {
+    public static int menu (String title, String[] options) {
 
         final int MIN_CHOICE = 1;
-        final int MAX_CHOICE = arrSize;
+        final int MAX_CHOICE = options.length;
 
         printMsg(title + "\n");
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < options.length; i++) {
             System.out.printf("%d. %s\n", i + 1, options[i]);
         }
 
@@ -431,10 +419,9 @@ public class Utils {
      * 2         3
      *
      * @param arr     the array to print
-     * @param arrSize the array's size
      */
-    public static void printArray (int[] arr, int arrSize) {
-        printArray("", arr, arrSize);
+    public static void printArray (int[] arr) {
+        printArray("", arr);
     }
 
     /**
@@ -449,11 +436,10 @@ public class Utils {
      *
      * @param title   the title to print
      * @param arr     the array to print
-     * @param arrSize the array's size
      */
-    public static void printArray (String title, int[] arr, int arrSize) {
+    public static void printArray (String title, int[] arr) {
 
-        if (arrSize < 0) {
+        if (arr.length < 0) {
             return;
         }
 
@@ -461,7 +447,7 @@ public class Utils {
 
         System.out.printf("%-10s%s\n", "Index", "Value");
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < arr.length; i++) {
             System.out.printf("%-10d%d\n", i, arr[i]);
         }
 
@@ -481,10 +467,9 @@ public class Utils {
      * 2         11.35782
      *
      * @param arr     the array to print
-     * @param arrSize the array's size size
      */
-    public static void printArray (double[] arr, int arrSize) {
-        printArray("", arr, arrSize);
+    public static void printArray (double[] arr) {
+        printArray("", arr);
     }
 
     /**
@@ -499,11 +484,10 @@ public class Utils {
      *
      * @param title   the title to print.
      * @param arr     the array to print
-     * @param arrSize the array's size
      */
-    public static void printArray (String title, double[] arr, int arrSize) {
+    public static void printArray (String title, double[] arr) {
 
-        if (arrSize < 0) {
+        if (arr.length < 0) {
             return;
         }
 
@@ -511,7 +495,7 @@ public class Utils {
 
         System.out.printf("%-10s%s\n", "Index", "Value");
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < arr.length; i++) {
             System.out.printf("%-10d%s\n", i, numToStringNoTrailingZeros(arr[i]));
         }
 
@@ -531,10 +515,9 @@ public class Utils {
      * 2         3.504182
      *
      * @param arr     the array to print
-     * @param arrSize the array's size
      */
-    public static void printArray (float[] arr, int arrSize) {
-        printArray("", arr, arrSize);
+    public static void printArray (float[] arr) {
+        printArray("", arr);
     }
 
     /**
@@ -549,11 +532,10 @@ public class Utils {
      *
      * @param title   the title to print
      * @param arr     the array to print
-     * @param arrSize the array's size
      */
-    public static void printArray (String title, float[] arr, int arrSize) {
+    public static void printArray (String title, float[] arr) {
 
-        if (arrSize < 0) {
+        if (arr.length < 0) {
             return;
         }
 
@@ -561,7 +543,7 @@ public class Utils {
 
         System.out.printf("%-10s%s\n", "Index", "Value");
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < arr.length; i++) {
             System.out.printf("%-10d%s\n", i, numToStringNoTrailingZeros(arr[i]));
         }
 
@@ -581,10 +563,9 @@ public class Utils {
      * 2         This is a third string
      *
      * @param arr     the array to print
-     * @param arrSize the array's size
      */
-    public static void printArray (String[] arr, int arrSize) {
-        printArray("", arr, arrSize);
+    public static void printArray (String[] arr) {
+        printArray("", arr);
     }
 
     /**
@@ -599,11 +580,10 @@ public class Utils {
      *
      * @param title   the title to print
      * @param arr     the array to print
-     * @param arrSize the array's size
      */
-    public static void printArray (String title, String[] arr, int arrSize) {
+    public static void printArray (String title, String[] arr) {
 
-        if (arrSize < 0) {
+        if (arr.length < 0) {
             return;
         }
 
@@ -611,7 +591,7 @@ public class Utils {
 
         System.out.printf("%-10s%s\n", "Index", "Value");
 
-        for (int i = 0; i < arrSize; i++) {
+        for (int i = 0; i < arr.length; i++) {
             System.out.printf("%-10d%s\n", i, arr[i]);
         }
 
