@@ -11,17 +11,16 @@ public class Course {
 	private Student[] studentRoster = new Student[DEFAULT_MAX_STUDENTS_IN_COURSE];
 	private Student[] studentWaitList = new Student[DEFAULT_MAX_STUDENTS_IN_WAITLIST];
 
-	// BEN: Maybe courseName instead?
 	private String courseName;
 
 	private int maxCourseStudents = DEFAULT_MAX_STUDENTS_IN_COURSE;
-	private int maxWaitListStudents = DEFAULT_MAX_STUDENTS_IN_WAITLIST; // BEN: Maybe maxWaitListStudents?
+	private int maxWaitListStudents = DEFAULT_MAX_STUDENTS_IN_WAITLIST;
 
 	private int numStudentsOnRoster = 0;
 	private int numStudentsOnWaitList = 0;
 
-	public Course (String passedCourseName) {
-		courseName = passedCourseName; // should we set studentRoster and studentWaitList to default number?
+	public Course (String courseName) {
+		this.courseName = courseName;
 	}
 
 	public Course (String courseName, int maxCourseStudents, int maxWaitListStudents) {
@@ -76,13 +75,6 @@ public class Course {
 
 	public String toString() {
 
-		/*
-		String str = String.format("%s has: \nRoster: %d/%d\n%s\nWaitlist has: %d/%d\n%s", courseName,
-				numStudentsOnRoster, maxCourseStudents, Arrays.deepToString(studentRoster), numStudentsOnWaitList,
-				getMaxWaitList(), Arrays.deepToString(studentWaitList));
-		 */
-
-		// BEN: Option 2 for toString()
 		String str = String.format("[%s]\n====================\nROSTER (%d/%d)\n%s\nWAIT LIST (%d/%d)\n%s",
 				courseName.toUpperCase(), numStudentsOnRoster, maxCourseStudents, studentRosterToString(), numStudentsOnWaitList, maxWaitListStudents, waitListToString());
 
@@ -156,7 +148,7 @@ public class Course {
 	}
 
 	// Returns index of student if on roster, otherwise returns -1
-	public int indexOfRosterStudent (Student student) {
+	private int indexOfRosterStudent (Student student) {
 
 		for (int i = 0; i < numStudentsOnRoster; i++) {
 
@@ -169,7 +161,7 @@ public class Course {
 	}
 
 	// Returns index of student if on waitlist, otherwise returns -1
-	public int indexOfWaitListStudent (Student student) {
+	private int indexOfWaitListStudent (Student student) {
 
 		for (int i = 0; i < numStudentsOnWaitList; i++) {
 
@@ -180,8 +172,6 @@ public class Course {
 
 		return -1;
 	}
-
-	// TODO: Reject students which match student ID
 
 	// Returns true if added student, otherwise false
 	// Fills roster, then waitlist
@@ -231,7 +221,7 @@ public class Course {
 		return droppedStudent;
 	}
 
-	public void deleteStudentFromRoster (int index) {
+	private void deleteStudentFromRoster (int index) {
 
 		studentRoster[index] = null;
 
@@ -247,17 +237,16 @@ public class Course {
 
 	}
 
-	public void deleteStudentFromWaitList (int index) {
-
-		// Shift all students down by 1
-		// -1 is what messes up addStudentFromWaitlist() call
-		for (int i = index; i < numStudentsOnWaitList - 1; i++) {
-			studentWaitList[i] = studentWaitList[i + 1];
-		}
+	private void deleteStudentFromWaitList (int index) {
 
 		// Reduce number of students by 1
 		if (numStudentsOnWaitList != 0) {
 			numStudentsOnWaitList -= 1;
+		}
+
+		// Shift all students down by 1
+		for (int i = index; i < numStudentsOnWaitList; i++) {
+			studentWaitList[i] = studentWaitList[i + 1];
 		}
 
 		studentWaitList[numStudentsOnWaitList] = null;
@@ -265,7 +254,7 @@ public class Course {
 
 	// Adds student to roster, delete from waitlist
 	// Returns true if added from waitlist, false if empty list
-	public boolean addStudentFromWaitList() {
+	private boolean addStudentFromWaitList() {
 
 		boolean addedFromWaitList = false;
 
@@ -273,15 +262,8 @@ public class Course {
 			// name on position 4 is now last student on waitlist. Changing to index at 0
 			studentRoster[numStudentsOnRoster] = studentWaitList[0]; // Arrays begin at index 0
 			numStudentsOnRoster += 1;
-			numStudentsOnWaitList -= 1;
 
-			// See if can replace with deleteStudentFromWaitlist(0)
-			// need to move over the WaitList of students
-			for (int i = 0; i < numStudentsOnWaitList; i++) {
-				studentWaitList[i] = studentWaitList[i+1];
-			}
-
-			studentWaitList[numStudentsOnWaitList] = null;
+			deleteStudentFromWaitList(0);
 			addedFromWaitList = true;
 		}
 
