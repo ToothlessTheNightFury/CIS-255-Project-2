@@ -20,9 +20,10 @@ public class CourseDriver {
      * ...
      */
 
+
     enum Menu {
         MAIN ("MAIN MENU", new String[] {"Add a course", "Manage Courses", "Manage Students", "Exit"}),
-        MANAGE_COURSES ("MANAGE COURSES", new String[] {"Add a student", "Delete a student", "Delete the course", "Back"}),
+        MANAGE_COURSES ("MANAGE COURSES", new String[] {"Add student", "Drop student", "Delete course", "Back"}),
         MANAGE_STUDENTS ("MANAGE STUDENTS", new String[] {"Search", "View All", "Back"}),
         DELETE_STUDENT ("DELETE A STUDENT", new String[] {"By ID", "By List", "Back"});
 
@@ -105,13 +106,14 @@ public class CourseDriver {
             switch (Utils.menu(courseList.get(courseIndex).getCourseName().toUpperCase(), Menu.MANAGE_COURSES.getOptions())) {
                 case 1:
                     addStudent (courseIndex);
-
                     break;
                 case 2:
-                    deleteStudent();
+                    dropStudent (courseIndex);
                     break;
                 case 3:
-                    deleteCourse();
+                    if (deleteCourse (courseIndex)) {
+                        cmd = "EXIT";
+                    }
                     break;
                 case 4:
                     cmd = "EXIT";
@@ -130,8 +132,9 @@ public class CourseDriver {
         int choice = Utils.menu("MANAGE COURSES", options);
 
         // If user hits Back
-        if (choice == options.length)
+        if (choice == options.length) {
             return -1;
+        }
 
         // Index starts at 0, choices start at 1
         return choice - 1;
@@ -153,7 +156,7 @@ public class CourseDriver {
         String studentName = Utils.promptStr("STUDENT NAME\nPlease enter the name of the student.\n");
         System.out.println();
 
-        String studentID =  Utils.promptStr("STUDENT ID\nPlease enter the ID number of the student, starting with S.\n");
+        String studentID =  Utils.promptStr("STUDENT ID\nPlease enter the ID number of the student.\n");
         System.out.println();
 
         boolean tuitionPaid = Utils.promptYN("STUDENT TUITION\nHas the student paid their tuition? (Y/N)\n");
@@ -170,7 +173,7 @@ public class CourseDriver {
         }
     }
 
-    private void deleteStudent() {
+    private void dropStudent (int courseIndex) {
 
         String cmd = "";
         while (!cmd.equals("EXIT")) {
@@ -179,10 +182,12 @@ public class CourseDriver {
 
             switch (Utils.menu(Menu.DELETE_STUDENT.getName(), Menu.DELETE_STUDENT.getOptions())) {
                 case 1:
-                    deleteStudentByID();
+                    dropStudentByID (courseIndex);
+                    cmd = "EXIT";
                     break;
                 case 2:
-                    deleteStudentByMenu();
+                    dropStudentByMenu (courseIndex);
+                    cmd = "EXIT";
                     break;
                 case 3:
                     cmd = "EXIT";
@@ -191,17 +196,125 @@ public class CourseDriver {
         }
     }
 
-    private void deleteStudentByID() {
+    private void dropStudentByID (int courseIndex) {
 
+        String studentID = Utils.promptStr("STUDENT ID\nPlease enter the ID of the student to delete, starting with S.\n");
+        System.out.println();
+
+        Student student = courseList.get(courseIndex).searchStudent(studentID);
+        boolean isDeleted = courseList.get(courseIndex).dropStudent(student);
+
+        if (isDeleted) {
+            System.out.printf("Successfully dropped student %s with student ID %s.\n\n", student.getName(), student.getID());
+        }
+        else {
+            System.out.printf("Unable to find student with student ID %s. Please make sure the ID was typed correctly.\n\n", studentID);
+        }
     }
 
-    private void deleteStudentByMenu() {
+    // TODO: BEN: Cleanup
+    private void dropStudentByMenu (int courseIndex) {
 
+        // Change to array list?
+        String[] studentListStr = studentListToStr(courseIndex);
+        String[] options = Arrays.copyOf(studentListStr, studentListStr.length + 1);
+        options[studentListStr.length] = "Back";
+
+        Course course = courseList.get(courseIndex);
+
+        int choice = 0;
+        boolean droppedStudent = false;
+
+        choice = Utils.menu("DROP STUDENT", options);
+
+        if (choice != options.length) {
+
+            int studentIndex = choice - 1;
+
+            if (Utils.promptYN(String.format("Do you want to delete %s? (Y/N)\n", studentListStr[studentIndex]))) {
+
+                Student dropStudent = new Student("", "", true);
+
+                // Student is on roster
+                if (studentIndex < course.getNumStudentsOnRoster()) {
+                    dropStudent = course.getStudentRoster(studentIndex);
+                }
+                else {
+                    dropStudent = course.getStudentWaitList(studentIndex);
+                }
+
+                courseList.get(courseIndex).dropStudent(dropStudent);
+                droppedStudent = true;
+                System.out.printf("\nSuccessfully dropped student %s with student ID %s.\n\n", dropStudent.getName(), dropStudent.getID());
+            }
+            else {
+                System.out.println();
+            }
+        }
     }
 
-    private void deleteCourse() {
+    // TODO: Maybe integrate above?
+    private int studentMenu (int courseIndex) {
 
+        String[] studentListStr = studentListToStr(courseIndex);
+        String[] options = Arrays.copyOf(studentListStr, studentListStr.length + 1);
+        options[studentListStr.length] = "Back";
 
+        int choice = Utils.menu("DROP STUDENT", options);
+
+        // If user hits Back
+        if (choice == options.length) {
+            return -1;
+        }
+
+        // Index starts at 0, choices start at 1
+        return choice - 1;
+    }
+
+    private String[] studentListToStr (int courseIndex) {
+
+        Course course = courseList.get(courseIndex);
+        int numStudents = course.getNumStudentsOnRoster() + course.getNumStudentsOnWaitList();
+
+        String[] studentListStr = new String[numStudents];
+
+        for (int i = 0; i < course.getNumStudentsOnRoster(); i++) {
+            studentListStr[i] = String.format("%s (%s)", course.getStudentRoster(i).getName(), course.getStudentRoster(i).getID());
+        }
+
+        for (int i = 0; i < course.getNumStudentsOnWaitList(); i++) {
+            studentListStr[i + course.getNumStudentsOnRoster()] = String.format("%s (%s)", course.getStudentWaitList(i).getName(), course.getStudentWaitList(i).getID());
+        }
+
+        return studentListStr;
+    }
+
+    private boolean deleteCourse (int courseIndex) {
+
+        boolean deletedCourse = false;
+        String courseName = courseList.get(courseIndex).getCourseName();
+
+        System.out.printf("DELETE COURSE\nType in the course name '%s' to delete the course, or BACK to return. WARNING: This action is irreversible.\n", courseName);
+
+        String input = "";
+
+        do {
+
+            input = Utils.promptStr();
+            System.out.println();
+
+            if (input.equals(courseName)) {
+                courseList.remove(courseIndex);
+                System.out.printf("Successfully deleted course %s.\n\n", courseName);
+                deletedCourse = true;
+            }
+            else if (!input.equalsIgnoreCase("BACK")) {
+                System.out.printf("Type the course name '%s' to delete the course, or BACK to return.\n", courseName);
+            }
+
+        } while (!input.equalsIgnoreCase("back") && deletedCourse == false);
+
+        return deletedCourse;
     }
 
     private void manageStudents() {
