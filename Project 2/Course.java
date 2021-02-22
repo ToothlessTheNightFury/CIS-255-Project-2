@@ -86,7 +86,7 @@ public class Course {
 		String str = "";
 
 		for (int i = 0; i < numStudentsOnRoster; i++) {
-			str += String.format("%s (%s)\n", studentRoster[i].getName(), studentRoster[i].getID());
+			str += String.format("%s\n", studentRoster[i]);
 		}
 
 		if (str.isEmpty()) {
@@ -101,7 +101,7 @@ public class Course {
 		String str = "";
 
 		for (int i = 0; i < numStudentsOnWaitList; i++) {
-			str += String.format("%s\n", studentWaitList[i].getName());
+			str += String.format("%s\n", studentWaitList[i]);
 		}
 
 		if (str.isEmpty()) {
@@ -111,11 +111,6 @@ public class Course {
 		return str;
 	}
 
-	
-	public Student[] getRoster() {
-		return studentRoster;
-	}
-	
 	// Returns true if student on roster or waitlist, otherwise false
 	public boolean isAlreadyRegistered (Student student) {
 
