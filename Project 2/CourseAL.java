@@ -2,16 +2,12 @@ import java.util.*;
 
 public class CourseAL {
 
-	public final int DEFAULT_MAX_STUDENTS_IN_COURSE = 30;
-	public final int DEFAULT_MAX_STUDENTS_IN_WAITLIST = 15;
-
 	private ArrayList<Student> studentRoster = new ArrayList<Student>();
 	private ArrayList<Student> studentWaitList = new ArrayList<Student>();
 
 	private String courseName;
-
-	private int maxCourseStudents = DEFAULT_MAX_STUDENTS_IN_COURSE;
-	private int maxWaitListStudents = DEFAULT_MAX_STUDENTS_IN_WAITLIST;
+	int maxCourseStudents, maxWaitListStudents;
+	
 
 	public CourseAL(String courseName) {
 		this.courseName = courseName;
@@ -19,8 +15,8 @@ public class CourseAL {
 
 	public CourseAL(String courseName, int maxCourseStudents, int maxWaitListStudents) {
 
-		studentRoster = new ArrayList<Student>(maxCourseStudents);
-		studentWaitList = new ArrayList<Student>(maxWaitListStudents);
+		studentRoster = new ArrayList<Student>();
+		studentWaitList = new ArrayList<Student>();
 
 		this.courseName = courseName;
 		this.maxCourseStudents = maxCourseStudents;
