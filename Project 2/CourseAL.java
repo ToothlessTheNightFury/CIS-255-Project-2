@@ -101,77 +101,26 @@ public class CourseAL {
 
 		return str;
 	}
-	/*
-	 * //Student is a regular array. Need to copy studentRoster ArrayList to regular
-	 * array? public Student[] getRoster() { Student[] studentArray = new
-	 * Student[studentRoster.size()];
-	 * 
-	 * for (int i=0; i<studentRoster.size(); i++) {
-	 * 
-	 * }
-	 * 
-	 * return studentRoster; }
-	 */
 
 	// Returns true if student on roster or waitlist, otherwise false
 	public boolean isAlreadyRegistered(Student student) {
 
-		if (isOnRoster(student) || isOnWaitList(student)) {
+		if ((studentRoster.contains(student) || studentWaitList.contains(student))){
 			return true;
 		}
 
 		return false;
 	}
 
-	// returns true if student is on roster, otherwise returns false
-	public boolean isOnRoster(Student student) {
-
-		for (int i = 0; i < studentRoster.size(); i++) {
-			if (student.equals(studentRoster.get(i))) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	// Returns true if student on waitlist, otherwise false
-	public boolean isOnWaitList(Student student) {
-
-		for (int i = 0; i < studentWaitList.size(); i++) {
-
-			if (student.equals(studentWaitList.get(i))) {
-				return true;
-			}
-		}
-
-		return false;
-	}
 
 	// Returns index of student if on roster, otherwise returns -1
 	private int indexOfRosterStudent(Student student) {
-
-		for (int i = 0; i < studentRoster.size(); i++) {
-
-			if (student.equals(studentRoster.get(i))) {
-				return i;
-			}
-		}
-
-		return -1;
+		return studentRoster.indexOf(student);
 	}
 
 	// Returns index of student if on waitlist, otherwise returns -1
 	private int indexOfWaitListStudent(Student student) {
-
-		for (int i = 0; i < studentWaitList.size(); i++) {
-
-			if (student.equals(studentWaitList.get(i))) {
-				return i;
-			}
-		}
-
-		return -1;
+		return studentWaitList.indexOf(student);
 	}
 
 	// Returns true if added student, otherwise false
@@ -199,10 +148,10 @@ public class CourseAL {
 	public boolean dropStudent(Student student) {
 
 		boolean droppedStudent = false;
-
-		int indexOfRosterStudent = indexOfRosterStudent(student);
-		int indexOfWaitListStudent = indexOfWaitListStudent(student);
-
+		
+		int indexOfRosterStudent = studentRoster.indexOf(student);
+		int indexOfWaitListStudent = studentWaitList.indexOf(student);
+		
 		// If found student on roster
 		if (indexOfRosterStudent != -1) {
 			deleteStudentFromRoster(indexOfRosterStudent);
