@@ -111,6 +111,11 @@ public class Course {
 		return str;
 	}
 
+	
+	public Student[] getRoster() {
+		return studentRoster;
+	}
+	
 	// Returns true if student on roster or waitlist, otherwise false
 	public boolean isAlreadyRegistered (Student student) {
 
