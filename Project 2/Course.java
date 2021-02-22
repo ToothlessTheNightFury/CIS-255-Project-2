@@ -69,10 +69,14 @@ public class Course {
 		return studentRoster[index];
 	}
 
-	public Student getStudentWaitList (int index) {
+	public Student[] getRoster() {
+		  return studentRoster;
+		}
+	
+	public Student getStudentWaitList(int index) {
 		return studentWaitList[index];
 	}
-
+	
 	public String toString() {
 
 		String str = String.format("[%s]\n====================\nROSTER (%d/%d)\n%s\nWAIT LIST (%d/%d)\n%s",
