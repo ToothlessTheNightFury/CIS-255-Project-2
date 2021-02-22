@@ -6,7 +6,7 @@ public class CourseAL {
 	private ArrayList<Student> studentWaitList = new ArrayList<Student>();
 
 	private String courseName;
-	int maxCourseStudents, maxWaitListStudents;
+	private int maxCourseStudents, maxWaitListStudents;
 	
 
 	public CourseAL(String courseName) {
