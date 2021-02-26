@@ -2,29 +2,9 @@ import java.util.*;
 
 public class CourseDriver {
 
-    /**
-     * MANAGE STUDENTS
-     * 1. Search
-     * 2. View All
-     * 3. Exit
-     *
-     * SEARCH
-     * Please enter the full name of the student. (Maybe implement fuzzy search later)
-     * John Doe
-     *
-     * VIEW ALL STUDENTS
-     * 1. Student1
-     * 2. Student2
-     * 3. Student3
-     * 4. Student4
-     * ...
-     */
-
-
     enum Menu {
-        MAIN ("MAIN MENU", new String[] {"Add a course", "Manage Courses", "Manage Students", "Exit"}),
+        MAIN ("MAIN MENU", new String[] {"Add a course", "Manage Courses", "Exit"}),
         MANAGE_COURSES ("MANAGE COURSES", new String[] {"Add student", "Drop student", "Delete course", "Back"}),
-        MANAGE_STUDENTS ("MANAGE STUDENTS", new String[] {"Search", "View All", "Back"}),
         DELETE_STUDENT ("DELETE A STUDENT", new String[] {"By ID", "By List", "Back"});
 
         private String name;
@@ -66,9 +46,6 @@ public class CourseDriver {
                     manageCourses();
                     break;
                 case 3:
-                    manageStudents();
-                    break;
-                case 4:
                     cmd = "EXIT";
                     break;
             }
@@ -163,7 +140,6 @@ public class CourseDriver {
         System.out.println();
 
         boolean isAdded = courseList.get(courseIndex).addStudent(new Student (studentName, studentID, tuitionPaid));
-        System.out.printf("isAdded: %b\n\n", isAdded);
 
         if (isAdded) {
             System.out.printf("Successfully added student %s with student ID %s.\n\n", studentName, studentID);
@@ -212,10 +188,8 @@ public class CourseDriver {
         }
     }
 
-    // TODO: BEN: Cleanup
     private void dropStudentByMenu (int courseIndex) {
 
-        // Change to array list?
         String[] studentListStr = studentListToStr(courseIndex);
         String[] options = Arrays.copyOf(studentListStr, studentListStr.length + 1);
         options[studentListStr.length] = "Back";
@@ -223,7 +197,6 @@ public class CourseDriver {
         Course course = courseList.get(courseIndex);
 
         int choice = 0;
-        boolean droppedStudent = false;
 
         choice = Utils.menu("DROP STUDENT", options);
 
@@ -240,35 +213,16 @@ public class CourseDriver {
                     dropStudent = course.getStudentRoster(studentIndex);
                 }
                 else {
-                    dropStudent = course.getStudentWaitList(studentIndex);
+                    dropStudent = course.getStudentWaitList(studentIndex - course.getNumStudentsOnRoster());
                 }
 
                 courseList.get(courseIndex).dropStudent(dropStudent);
-                droppedStudent = true;
                 System.out.printf("\nSuccessfully dropped student %s with student ID %s.\n\n", dropStudent.getName(), dropStudent.getID());
             }
             else {
                 System.out.println();
             }
         }
-    }
-
-    // TODO: Maybe integrate above?
-    private int studentMenu (int courseIndex) {
-
-        String[] studentListStr = studentListToStr(courseIndex);
-        String[] options = Arrays.copyOf(studentListStr, studentListStr.length + 1);
-        options[studentListStr.length] = "Back";
-
-        int choice = Utils.menu("DROP STUDENT", options);
-
-        // If user hits Back
-        if (choice == options.length) {
-            return -1;
-        }
-
-        // Index starts at 0, choices start at 1
-        return choice - 1;
     }
 
     private String[] studentListToStr (int courseIndex) {
@@ -312,12 +266,8 @@ public class CourseDriver {
                 System.out.printf("Type the course name '%s' to delete the course, or BACK to return.\n", courseName);
             }
 
-        } while (!input.equalsIgnoreCase("back") && deletedCourse == false);
+        } while (!input.equalsIgnoreCase("back") && !deletedCourse);
 
         return deletedCourse;
-    }
-
-    private void manageStudents() {
-
     }
 }

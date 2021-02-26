@@ -1,6 +1,5 @@
 import java.util.*;
 
-// TODO: BEN: Add javadoc for all methods?
 // TODO: BEN: Make internal functions private
 
 public class Course {
