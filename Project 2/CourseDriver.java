@@ -270,4 +270,10 @@ public class CourseDriver {
 
         return deletedCourse;
     }
+
+    public static void main (String[] args) {
+
+        CourseDriver driver = new CourseDriver();
+        driver.run();
+    }
 }
