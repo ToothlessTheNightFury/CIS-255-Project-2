@@ -100,11 +100,9 @@ public class CourseAL {
 
 	// Returns true if student on roster or waitlist, otherwise false
 	public boolean isAlreadyRegistered(Student student) {
-
 		if ((studentRoster.contains(student) || studentWaitList.contains(student))){
 			return true;
 		}
-
 		return false;
 	}
 
@@ -164,16 +162,12 @@ public class CourseAL {
 	}
 
 	private void deleteStudentFromRoster(int index) {
-
 		studentRoster.remove(index);
 		addStudentFromWaitList();
-		
-
 	}
 
 	private void deleteStudentFromWaitList(int index) {
 		studentWaitList.remove(index);
-	
 	}
 
 	// Adds student to roster, delete from waitlist
@@ -184,7 +178,7 @@ public class CourseAL {
 
 		if (studentWaitList.size() > 0) {
 			// name on position 4 is now last student on waitlist. Changing to index at 0
-			studentRoster.add(studentRoster.size()-1, studentWaitList.get(0));
+			studentRoster.add(studentWaitList.get(0));
 			studentWaitList.remove(0);
 			// AUTO delete in arrayList but does it get shifted over automatically?
 			addedFromWaitList = true;
